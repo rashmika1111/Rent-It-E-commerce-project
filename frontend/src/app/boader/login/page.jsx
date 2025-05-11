@@ -40,7 +40,7 @@ function page() {
         </form>
         <p className="text-center text-gray-600 mt-4">
           Don't have an account?{' '}
-          <Link href="/customer/signup" className="text-green-500 font-semibold hover:underline">
+          <Link href="/boader/signup" className="text-green-500 font-semibold hover:underline">
             Go to Signup
           </Link>
         </p>
