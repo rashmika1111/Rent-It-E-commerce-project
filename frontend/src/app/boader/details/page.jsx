@@ -1,10 +1,11 @@
 "use client";
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 function page() {
   const searchParams = useSearchParams();
+  const router = useRouter();
 
   const address = searchParams.get('address');
   const phone = searchParams.get('phone');
@@ -12,8 +13,42 @@ function page() {
   const type = searchParams.get('type');
   const maxPersons = searchParams.get('maxPersons');
   const roomCapacity = searchParams.get('roomCapacity');
+  const district = searchParams.get('district'); // Added district
 
   const [images, setImages] = useState([]);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append("address", address);
+    formData.append("phone", phone);
+    formData.append("price", price);
+    formData.append("type", type);
+    formData.append("district", district); // Include district
+    formData.append("maxPersons", maxPersons || "");
+    formData.append("roomCapacity", roomCapacity || "");
+    images.forEach((img) => {
+      formData.append("images", img.file);
+    });
+
+    try {
+      const response = await fetch("http://localhost:8080/api/boardings", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (response.ok) {
+        alert("Boarding details submitted successfully!");
+        router.push('/boader/dashboard'); // Redirect to dashboard
+      } else {
+        alert("Failed to submit boarding details.");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while submitting data.");
+    }
+  };
 
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
@@ -24,23 +59,7 @@ function page() {
     setImages((prevImages) => [...prevImages, ...newImageUrls]);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const data = {
-      address,
-      phone,
-      price,
-      type,
-      maxPersons,
-      roomCapacity,
-      images: images.map((img) => img.file), // Send file objects for backend processing
-    };
-
-    console.log('Submitting Data:', data);
-    // Add API call or submission logic here
-  };
-
-  if (!address || !phone || !price || !type) {
+  if (!address || !phone || !price || !type || !district) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <p className="text-red-500">Error: Missing boarding details in the URL.</p>
@@ -59,6 +78,7 @@ function page() {
           <p className="text-gray-600">Phone: {phone}</p>
           <p className="text-gray-600">Price: {price}</p>
           <p className="text-gray-600">Type: {type}</p>
+          <p className="text-gray-600">District: {district}</p> {/* Display district */}
           {type === 'house' && <p className="text-gray-600">Max Persons: {maxPersons}</p>}
           {type === 'room' && <p className="text-gray-600">Room Capacity: {roomCapacity}</p>}
         </div>

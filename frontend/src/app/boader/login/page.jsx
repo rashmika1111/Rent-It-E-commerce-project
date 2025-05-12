@@ -1,12 +1,49 @@
+"use client";
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
-function page() {
+function Page() {
+  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
+  const router = useRouter();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.id]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError('');
+
+    try {
+      const response = await fetch('http://localhost:8080/api/users/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        const user = await response.json();
+        if (user.role === 'Boader') {
+          router.push('/boader/dashboard'); // Redirect to dashboard
+        } else {
+          setError('Invalid role. Only Boaders can log in here.');
+        }
+      } else {
+        setError('Invalid email or password. Please try again.');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      setError('Something went wrong. Please try again later.');
+    }
+  };
+
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Boader Login</h2>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-600 font-medium mb-2">
               Email
@@ -16,6 +53,8 @@ function page() {
               id="email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter your email"
+              value={formData.email}
+              onChange={handleChange}
               required
             />
           </div>
@@ -28,9 +67,12 @@ function page() {
               id="password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter your password"
+              value={formData.password}
+              onChange={handleChange}
               required
             />
           </div>
+          {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
           <button
             type="submit"
             className="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition"
@@ -49,4 +91,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

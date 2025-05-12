@@ -11,6 +11,7 @@ function page() {
     price: '',
     maxPersons: '',
     roomCapacity: '',
+    district: '',
   });
 
   const router = useRouter();
@@ -25,7 +26,15 @@ function page() {
     const queryString = new URLSearchParams({ ...formData, type }).toString();
     router.push(`/boader/details?${queryString}`);
   };
-  
+
+  const districts = [
+    'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo', 
+    'Galle', 'Gampaha', 'Hambantota', 'Jaffna', 'Kalutara',
+    'Kandy', 'Kegalle', 'Kilinochchi', 'Kurunegala', 'Mannar',
+    'Matale', 'Matara', 'Moneragala', 'Mullaitivu', 'Nuwara Eliya',
+    'Polonnaruwa', 'Puttalam', 'Ratnapura', 'Trincomalee', 'Vavuniya'
+  ];
+
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
@@ -77,6 +86,29 @@ function page() {
               placeholder="Enter price"
               required
             />
+          </div>
+
+          {/* District Selector */}
+          <div className="mb-4">
+            <label htmlFor="district" className="block text-gray-600 font-medium mb-2">
+              District
+            </label>
+            <select
+              id="district"
+              value={formData.district}
+              onChange={handleChange}
+              className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            >
+              <option value="" disabled>
+                Select district
+              </option>
+              {districts.map((district) => (
+                <option key={district} value={district}>
+                  {district}
+                </option>
+              ))}
+            </select>
           </div>
 
           {/* Type Selector */}

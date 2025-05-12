@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 
 function Page() {
-  const [formData, setFormData] = useState({ name: '', email: '', password: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', password: '', role: 'Boader' });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
@@ -21,12 +21,15 @@ function Page() {
 
       if (response.ok) {
         const data = await response.json();
-        console.log('User created:', data);
+        console.log('Boader created:', data);
+        alert('Signup successful!');
       } else {
-        console.error('Failed to create user');
+        console.error('Failed to create boader');
+        alert('Signup failed. Please try again.');
       }
     } catch (error) {
       console.error('Error:', error);
+      alert('An error occurred. Please try again.');
     }
   };
 
@@ -43,8 +46,9 @@ function Page() {
               type="text"
               id="name"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-              onChange={handleChange}
               placeholder="Enter your name"
+              value={formData.name}
+              onChange={handleChange}
               required
             />
           </div>
@@ -57,6 +61,7 @@ function Page() {
               id="email"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter your email"
+              value={formData.email}
               onChange={handleChange}
               required
             />
@@ -70,6 +75,7 @@ function Page() {
               id="password"
               className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
               placeholder="Enter your password"
+              value={formData.password}
               onChange={handleChange}
               required
             />
