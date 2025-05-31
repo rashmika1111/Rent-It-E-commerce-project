@@ -1,22 +1,29 @@
 "use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 function page() {
-  const [district, setDistrict] = useState('');
-  const [type, setType] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [district, setDistrict] = useState("");
+  const [type, setType] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const router = useRouter();
 
   const handleSearch = (e) => {
     e.preventDefault();
-    router.push({
-      pathname: '/customer/details',
-      query: { district, type, address: searchQuery },
-    });
+    router.push(
+      `/customer/details?district=${encodeURIComponent(district)}&type=${encodeURIComponent(type)}&address=${encodeURIComponent(searchQuery)}`
+    );
   };
+
+  const districts = [
+    "Ampara", "Anuradhapura", "Badulla", "Batticaloa", "Colombo",
+    "Galle", "Gampaha", "Hambantota", "Jaffna", "Kalutara",
+    "Kandy", "Kegalle", "Kilinochchi", "Kurunegala", "Mannar",
+    "Matale", "Matara", "Monaragala", "Mullaitivu", "Nuwara Eliya",
+    "Polonnaruwa", "Puttalam", "Ratnapura", "Trincomalee", "Vavuniya",
+  ];
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -38,9 +45,11 @@ function page() {
               <option value="" disabled>
                 Select district
               </option>
-              <option value="district1">District 1</option>
-              <option value="district2">District 2</option>
-              <option value="district3">District 3</option>
+              {districts.map((districtName) => (
+                <option key={districtName} value={districtName}>
+                  {districtName}
+                </option>
+              ))}
             </select>
           </div>
 

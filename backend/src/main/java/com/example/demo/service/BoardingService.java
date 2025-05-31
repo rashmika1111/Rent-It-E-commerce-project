@@ -59,4 +59,10 @@ public class BoardingService {
         image.transferTo(file);  // Save the image to disk
         return file.getAbsolutePath();  // Return the file path
     }
+    
+    public List<Boarding> searchBoardings(String district, String type, String address) {
+        return boardingRepository.findBoardingsByCriteria(district, type, address);
+    }
+    
+   
 }

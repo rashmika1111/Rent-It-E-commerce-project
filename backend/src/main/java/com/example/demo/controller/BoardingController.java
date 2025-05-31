@@ -16,6 +16,7 @@ public class BoardingController {
     @Autowired
     private BoardingService boardingService;
 
+    // Create a new boarding with image uploads
     @PostMapping(consumes = {"multipart/form-data"})
     public ResponseEntity<Boarding> createBoarding(
             @RequestParam String address,
@@ -31,8 +32,20 @@ public class BoardingController {
         return ResponseEntity.ok(boarding);
     }
 
+    // Get all boardings
     @GetMapping
     public ResponseEntity<List<Boarding>> getAllBoardings() {
         return ResponseEntity.ok(boardingService.getAllBoardings());
+    }
+
+    // Search boardings based on filters
+    @GetMapping("/search")
+    public ResponseEntity<List<Boarding>> searchBoardings(
+            @RequestParam String district,
+            @RequestParam String type,
+            @RequestParam String address
+    ) {
+        List<Boarding> boardings = boardingService.searchBoardings(district, type, address);
+        return ResponseEntity.ok(boardings);
     }
 }
