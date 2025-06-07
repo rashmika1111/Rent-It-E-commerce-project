@@ -1,20 +1,39 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
 
-function page() {
+export default function page() {
   const [district, setDistrict] = useState("");
   const [type, setType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [boardingData, setBoardingData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  const router = useRouter();
-
-  const handleSearch = (e) => {
+  const handleSearch = async (e) => {
     e.preventDefault();
-    router.push(
-      `/customer/details?district=${encodeURIComponent(district)}&type=${encodeURIComponent(type)}&address=${encodeURIComponent(searchQuery)}`
-    );
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/boardings/search?district=${encodeURIComponent(
+          district
+        )}&type=${encodeURIComponent(type)}&address=${encodeURIComponent(searchQuery)}`
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setBoardingData(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const districts = [
@@ -26,8 +45,8 @@ function page() {
   ];
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
+    <div className="flex flex-col items-center min-h-screen bg-gray-100 p-6">
+      <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg mb-6">
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Search Boarding</h2>
         <form onSubmit={handleSearch}>
           {/* District Filter */}
@@ -98,8 +117,46 @@ function page() {
           </button>
         </form>
       </div>
+
+      {/* Results Section */}
+      {/* Results Section */}
+<div className="w-full max-w-3xl">
+  <h3 className="text-xl font-bold text-gray-700 mb-4">Search Results</h3>
+  {loading && <div className="text-center">Loading...</div>}
+  {error && <div className="text-center text-red-500">Error: {error}</div>}
+  {boardingData.length === 0 && !loading && !error && (
+    <p className="text-gray-600">No results found. Please try different filters.</p>
+  )}
+  <div className="grid grid-cols-1 gap-4">
+    {boardingData.map((boarding) => (
+      <div
+        key={boarding.id}
+        className="p-4 bg-gray-100 rounded-lg shadow-md"
+      >
+        {/* Image Section */}
+        {boarding.imagePaths && boarding.imagePaths.length > 0 ? (
+          <img
+            src={boarding.imagePaths[0]} // Use the first image in the array
+            alt={`Image of ${boarding.address}`}
+            className="w-full h-48 object-cover rounded-lg mb-4"
+          />
+        ) : (
+          <div className="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
+            <span className="text-gray-500">No Image Available</span>
+          </div>
+        )}
+
+        {/* Text Details */}
+        <h4 className="text-lg font-bold text-gray-700">{boarding.address}</h4>
+        <p className="text-gray-600">Phone: {boarding.phone}</p>
+        <p className="text-gray-600">Price: {boarding.price}</p>
+        <p className="text-gray-600">Type: {boarding.type}</p>
+        <p className="text-gray-600">District: {boarding.district}</p>
+      </div>
+    ))}
+  </div>
+</div>
+
     </div>
   );
 }
-
-export default page;
