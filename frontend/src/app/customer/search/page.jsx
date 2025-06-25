@@ -72,7 +72,7 @@ export default function page() {
             </select>
           </div>
 
-          {/* Type Filter */}
+          
           <div className="mb-4">
             <label htmlFor="type" className="block text-gray-600 font-medium mb-2">
               Select Type
@@ -92,7 +92,7 @@ export default function page() {
             </select>
           </div>
 
-          {/* Address Search */}
+         
           <div className="mb-4">
             <label htmlFor="searchQuery" className="block text-gray-600 font-medium mb-2">
               Search by Address
@@ -108,7 +108,7 @@ export default function page() {
             />
           </div>
 
-          {/* Search Button */}
+          
           <button
             type="submit"
             className="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition"
@@ -118,8 +118,6 @@ export default function page() {
         </form>
       </div>
 
-      {/* Results Section */}
-      {/* Results Section */}
 <div className="w-full max-w-3xl">
   <h3 className="text-xl font-bold text-gray-700 mb-4">Search Results</h3>
   {loading && <div className="text-center">Loading...</div>}
@@ -130,29 +128,28 @@ export default function page() {
   <div className="grid grid-cols-1 gap-4">
     {boardingData.map((boarding) => (
       <div
-        key={boarding.id}
-        className="p-4 bg-gray-100 rounded-lg shadow-md"
-      >
-        {/* Image Section */}
-        {boarding.imagePaths && boarding.imagePaths.length > 0 ? (
-          <img
-            src={boarding.imagePaths[0]} // Use the first image in the array
-            alt={`Image of ${boarding.address}`}
-            className="w-full h-48 object-cover rounded-lg mb-4"
-          />
-        ) : (
-          <div className="w-full h-48 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
-            <span className="text-gray-500">No Image Available</span>
-          </div>
-        )}
+  key={boarding.id}
+  className="p-6 bg-white rounded-xl shadow-lg flex flex-col items-start"
+>
+  {boarding.imagePaths && boarding.imagePaths.length > 0 ? (
+    <img
+      src={`http://localhost:8080/${boarding.imagePaths[0]}`}
+      alt={`Image of ${boarding.address}`}
+      className="w-full h-64 object-cover rounded-lg shadow-sm mb-4"
+    />
+  ) : (
+    <div className="w-full h-64 bg-gray-200 flex items-center justify-center rounded-lg mb-4">
+      <span className="text-gray-500">No Image Available</span>
+    </div>
+  )}
 
-        {/* Text Details */}
-        <h4 className="text-lg font-bold text-gray-700">{boarding.address}</h4>
-        <p className="text-gray-600">Phone: {boarding.phone}</p>
-        <p className="text-gray-600">Price: {boarding.price}</p>
-        <p className="text-gray-600">Type: {boarding.type}</p>
-        <p className="text-gray-600">District: {boarding.district}</p>
-      </div>
+  <h4 className="text-lg font-bold text-gray-800 mb-2">{boarding.address}</h4>
+  <p className="text-gray-600 mb-1">Phone: {boarding.phone}</p>
+  <p className="text-gray-600 mb-1">Price: {boarding.price}</p>
+  <p className="text-gray-600 mb-1">Type: {boarding.type}</p>
+  <p className="text-gray-600">District: {boarding.district}</p>
+</div>
+
     ))}
   </div>
 </div>

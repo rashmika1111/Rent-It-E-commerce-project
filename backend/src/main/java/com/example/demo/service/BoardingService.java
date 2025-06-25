@@ -17,22 +17,20 @@ public class BoardingService {
     @Autowired
     private BoardingRepository boardingRepository;
 
-    // Method to create a new Boarding
+   
     public Boarding createBoarding(String address, String phone, String price, String type, 
                                    Integer maxPersons, Integer roomCapacity, String district, 
                                    List<MultipartFile> images) {
-        // Saving image paths to a list
         List<String> imagePaths = new ArrayList<>();
         try {
             for (MultipartFile image : images) {
-                String imagePath = saveImage(image); // Save image and return its path
+                String imagePath = saveImage(image);
                 imagePaths.add(imagePath);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Error while saving images: " + e.getMessage(), e);
         }
 
-        // Create a new Boarding object
         Boarding boarding = new Boarding();
         boarding.setAddress(address);
         boarding.setPhone(phone);
@@ -40,29 +38,37 @@ public class BoardingService {
         boarding.setType(type);
         boarding.setMaxPersons(maxPersons);
         boarding.setRoomCapacity(roomCapacity);
-        boarding.setDistrict(district);  // Set the district
+        boarding.setDistrict(district);
         boarding.setImagePaths(imagePaths);
 
-        // Save to database
         return boardingRepository.save(boarding);
     }
 
-    // Method to get all Boardings
+   
     public List<Boarding> getAllBoardings() {
         return boardingRepository.findAll();
     }
 
-    // Helper method to save image and return the file path
-    private String saveImage(MultipartFile image) throws IOException {
-        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
-        File file = new File("uploads/" + fileName);
-        image.transferTo(file);  // Save the image to disk
-        return file.getAbsolutePath();  // Return the file path
-    }
-    
+   
     public List<Boarding> searchBoardings(String district, String type, String address) {
         return boardingRepository.findBoardingsByCriteria(district, type, address);
     }
-    
+
    
+    private String saveImage(MultipartFile image) throws IOException {
+        String uploadDir = "C:\\Users\\NMC\\OneDrive\\Documents\\GitHub\\Rent-It-E-commerce-project\\uploads/";
+        File dir = new File(uploadDir);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String fileName = System.currentTimeMillis() + "_" + image.getOriginalFilename();
+        File file = new File(uploadDir + fileName);
+        image.transferTo(file);
+
+        // Return the URL path to the image
+        return "http://localhost:8080/" + fileName;
+    }
+
+
 }

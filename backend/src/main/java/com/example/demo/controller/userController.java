@@ -30,7 +30,6 @@ public class userController {
         return ResponseEntity.ok(userService.getAllUsers());
     }
     
- // Login user by email and password
     @PostMapping("/login")
     public ResponseEntity<?> loginUser(@RequestBody Users loginDetails) {
         Users user = userService.loginUser(loginDetails.getEmail(), loginDetails.getPassword());
