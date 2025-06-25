@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-function page() {
+function Page() {
   const [type, setType] = useState('');
   const [formData, setFormData] = useState({
     address: '',
@@ -28,19 +28,18 @@ function page() {
   };
 
   const districts = [
-    'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo', 
+    'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo',
     'Galle', 'Gampaha', 'Hambantota', 'Jaffna', 'Kalutara',
     'Kandy', 'Kegalle', 'Kilinochchi', 'Kurunegala', 'Mannar',
     'Matale', 'Matara', 'Moneragala', 'Mullaitivu', 'Nuwara Eliya',
-    'Polonnaruwa', 'Puttalam', 'Ratnapura', 'Trincomalee', 'Vavuniya'
+    'Polonnaruwa', 'Puttalam', 'Ratnapura', 'Trincomalee', 'Vavuniya',
   ];
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 relative">
       <div className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-lg">
         <h2 className="text-2xl font-bold text-center text-gray-700 mb-6">Boarding Dashboard</h2>
         <form onSubmit={handleNext}>
-          {/* Address Field */}
           <div className="mb-4">
             <label htmlFor="address" className="block text-gray-600 font-medium mb-2">
               Address
@@ -55,8 +54,6 @@ function page() {
               required
             />
           </div>
-
-          {/* Phone Number Field */}
           <div className="mb-4">
             <label htmlFor="phone" className="block text-gray-600 font-medium mb-2">
               Phone Number
@@ -71,8 +68,6 @@ function page() {
               required
             />
           </div>
-
-          {/* Price Field */}
           <div className="mb-4">
             <label htmlFor="price" className="block text-gray-600 font-medium mb-2">
               Price
@@ -87,8 +82,6 @@ function page() {
               required
             />
           </div>
-
-          {/* District Selector */}
           <div className="mb-4">
             <label htmlFor="district" className="block text-gray-600 font-medium mb-2">
               District
@@ -110,8 +103,6 @@ function page() {
               ))}
             </select>
           </div>
-
-          {/* Type Selector */}
           <div className="mb-4">
             <label htmlFor="type" className="block text-gray-600 font-medium mb-2">
               Type
@@ -130,8 +121,6 @@ function page() {
               <option value="room">Room</option>
             </select>
           </div>
-
-          {/* Conditional Fields for House */}
           {type === 'house' && (
             <div className="mb-4">
               <label htmlFor="maxPersons" className="block text-gray-600 font-medium mb-2">
@@ -147,8 +136,6 @@ function page() {
               />
             </div>
           )}
-
-          {/* Conditional Fields for Room */}
           {type === 'room' && (
             <div className="mb-4">
               <label htmlFor="roomCapacity" className="block text-gray-600 font-medium mb-2">
@@ -166,8 +153,6 @@ function page() {
               </select>
             </div>
           )}
-
-          {/* Next Button */}
           <button
             type="submit"
             className="w-full bg-green-500 text-white py-2 rounded-lg font-semibold hover:bg-green-600 transition"
@@ -176,8 +161,15 @@ function page() {
           </button>
         </form>
       </div>
+      
+      <button
+        onClick={() => router.push('/')} 
+        className="fixed bottom-6 right-6 bg-blue-500 text-white px-4 py-2 rounded-full shadow-lg hover:bg-blue-600 transition"
+      >
+        Home
+      </button>
     </div>
   );
 }
 
-export default page;
+export default Page;
