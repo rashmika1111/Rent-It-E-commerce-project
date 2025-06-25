@@ -26,7 +26,7 @@ public class UserService {
         return userRepository.findAll();
     }
     
-    // Login user by email and password
+    
     public Users loginUser(String email, String password) {
         Optional<Users> user = userRepository.findByEmailAndPassword(email, password);
         return user.orElse(null);

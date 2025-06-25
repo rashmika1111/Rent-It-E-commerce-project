@@ -66,7 +66,7 @@ public class BoardingService {
         File file = new File(uploadDir + fileName);
         image.transferTo(file);
 
-        // Return the URL path to the image
+        
         return "http://localhost:8080/" + fileName;
     }
 

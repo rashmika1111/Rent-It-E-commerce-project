@@ -12,16 +12,16 @@ public class Boarding {
     private String address;
     private String phone;
     private String price;
-    private String type; // house or room
-    private Integer maxPersons; // applicable for houses
-    private Integer roomCapacity; // applicable for rooms
+    private String type; 
+    private Integer maxPersons; 
+    private Integer roomCapacity; 
 
-    private String district; // New field for district
+    private String district;
 
     @ElementCollection
-    private List<String> imagePaths; // Stores file paths for uploaded images
+    private List<String> imagePaths; 
 
-    // Getters and Setters
+    
     public Long getId() {
         return id;
     }
